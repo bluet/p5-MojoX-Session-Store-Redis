@@ -11,8 +11,10 @@ use namespace::clean;
 
 __PACKAGE__->attr('redis');
 __PACKAGE__->attr('redis_prefix');
-__PACKAGE__->attr('redis_db_num');
+__PACKAGE__->attr('redis_dbid');
 
+
+=encoding utf8
 =head1 NAME
 
 MojoX::Session::Store::Redis - RedisDB Store for MojoX::Session
@@ -32,13 +34,13 @@ sub new {
 	bless $self, $class;
 
 	$param ||= {};
-	my $db_num = $self->redis_db_num = delete $param->{db_num};
-	$self->redis_prefix(delete $param->{prefix} || 'mojo-session');
+	my $dbid = $self->redis_dbid = delete $param->{redis_dbid};
+	$self->redis_prefix(delete $param->{redis_prefix} || 'mojo-session');
 	$param->{server} ||= '127.0.0.1:6379';
 	
 	$self->redis($param->{redis} || MojoX::Redis->new($param));
 	
-	# FIXME: $db_num
+	# FIXME: $dbid
 
 	return $self;
 }
@@ -87,14 +89,12 @@ sub delete {
 
 =head1 SYNOPSIS
 
-	use MojoX::Session::Store::Redis;
-
 	my $session = MojoX::Session->new(
 		tx        => $tx,
 		store     => MojoX::Session::Store::Redis->new({
 			server	=> '127.0.0.1:6379',
-			prefix	=> 'mojo-session',
-			db_num	=> 0,
+			redis_prefix	=> 'mojo-session',
+			redis_dbid	=> 0,
 		}),
 		transport => MojoX::Session::Transport::Cookie->new,
 	);
@@ -120,16 +120,16 @@ Get and set MojoX::Redis object.
 
 =head2 C<redis_prefix>
     
-    my $prefix = $store->prefix;
+    my $prefix = $store->redis_prefix;
 
 Get and set the Key prefix of the stored session in Redis.
 Default is 'mojo-session'.
 
-=head2 C<redis_db_num>
+=head2 C<redis_dbid>
     
-    my $db_num = $store->db_num;
+    my $dbid = $store->redis_dbid;
 
-Get and set the DB Number to use in Redis DB.
+Get and set the DB ID Number to use in Redis DB.
 Default is 0.
 
 
@@ -140,8 +140,8 @@ L<MojoX::Session::Store>, and few more.
 
 =head2 C<new>
 
-C<new> uses the redis_prefix and redis_db_num parameters for the Key name prefix 
-and the DB number respectively. All other parameters are passed to C<MojoX::Redis->new()>.
+C<new> uses the redis_prefix and redis_dbid parameters for the Key name prefix 
+and the DB ID Number respectively. All other parameters are passed to C<MojoX::Redis->new()>.
 
 =head2 C<create>
 
