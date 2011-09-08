@@ -2,9 +2,9 @@ package MojoX::Session::Store::Redis;
 
 use warnings;
 use strict;
+use Redis;
 
 use base 'MojoX::Session::Store';
-use MojoX::Redis;
 
 
 use namespace::clean;
@@ -21,11 +21,11 @@ MojoX::Session::Store::Redis - RedisDB Store for MojoX::Session
 
 =head1 VERSION
 
-Version 0.02
+Version 0.03
 
 =cut
 
-our $VERSION = '0.02';
+our $VERSION = '0.03';
 
 
 sub new {
@@ -38,7 +38,7 @@ sub new {
 	$self->redis_prefix(delete $param->{redis_prefix} || 'mojo-session');
 	$param->{server} ||= '127.0.0.1:6379';
 	
-	$self->redis($param->{redis} || MojoX::Redis->new($param));
+	$self->redis($param->{redis} || Redis->new($param));
 	
 	# FIXME: $dbid
 
@@ -50,12 +50,9 @@ sub create {
 	my ($self, $sid, $expires, $data) = @_;
 	my $prefix = $self->redis_prefix;
 
-	my $new_data = {
-		sid	 => $sid,
-		data	=> $data,
-		expires => $expires,
-	};
-	$self->redis->set("$prefix-$sid" => $new_data);
+	$self->redis->set("$prefix:$sid:sid" => $sid);
+	$self->redis->set("$prefix:$sid:data" => $data);
+	$self->redis->set("$prefix:$sid:expires" => $expires);
 	
 	# FIXME
 	# Check error
@@ -74,15 +71,20 @@ sub update {
 sub load {
 	my ($self, $sid) = @_;
 	my $prefix = $self->redis_prefix;
-	my $res = $self->redis->get("$prefix-$sid");
-	return ($res->{expires}, $res->{data});
+	
+	my $data = $self->redis->get("$prefix:$sid:data" => $data);
+	my $expires = $self->redis->get("$prefix:$sid:expires" => $expires);
+	
+	return ($expires, $data);
 }
 
 
 sub delete {
 	my ($self, $sid) = @_;
 	my $prefix = $self->redis_prefix;
-	my $res = $self->redis->del("$prefix-$sid");
+	$self->redis->del("$prefix:$sid:sid" => $sid);
+	$self->redis->del("$prefix:$sid:data" => $data);
+	$self->redis->del("$prefix:$sid:expires" => $expires);
 	return 1;
 }
 
