@@ -21,11 +21,11 @@ MojoX::Session::Store::Redis - RedisDB Store for MojoX::Session
 
 =head1 VERSION
 
-Version 0.01
+Version 0.02
 
 =cut
 
-our $VERSION = '0.01';
+our $VERSION = '0.02';
 
 
 sub new {
@@ -176,10 +176,12 @@ automatically be notified of progress on your bug as I make changes.
 =head1 CONTRIBUTE
 
 Main:
-bzr repository etc at L<https://launchpad.net/p5-mojox-session-store-redis>.
+
+	bzr repository etc at L<https://launchpad.net/p5-mojox-session-store-redis>.
 
 A copy of the codes:
-git repository etc at L<https://github.com/BlueT/p5-MojoX-Session-Store-Redis>.
+
+	git repository etc at L<https://github.com/BlueT/p5-MojoX-Session-Store-Redis>.
 
 
 =head1 SUPPORT
