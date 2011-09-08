@@ -43,6 +43,15 @@ You can also look for information at:
         http://search.cpan.org/dist/MojoX-Session-Store-Redis/
 
 
+CONTRIBUTE
+
+Main:
+	bzr repository etc at https://launchpad.net/p5-mojox-session-store-redis.
+
+A copy of the codes:
+	git repository etc at https://github.com/BlueT/p5-MojoX-Session-Store-Redis.
+
+
 LICENSE AND COPYRIGHT
 
 Copyright (C) 2011 BlueT - Matthew Lien - 練喆明

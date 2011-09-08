@@ -1,4 +1,6 @@
 Revision history for MojoX-Session-Store-Redis
+0.02	Thu Sep  8 10:31:27 CST 2011
+	Fix document bug
 
 0.01    Date/time
         First version, released on an unsuspecting world.
