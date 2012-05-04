@@ -1,4 +1,7 @@
 Revision history for MojoX-Session-Store-Redis
+0.04	Fri May  4 10:39:34 CST 2012
+	Bugfix: compile error
+	
 0.03	Thu Sep  8 18:02:33 CST 2011
 	Fix nonsense function
 

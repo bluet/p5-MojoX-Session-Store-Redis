@@ -21,11 +21,11 @@ MojoX::Session::Store::Redis - RedisDB Store for MojoX::Session
 
 =head1 VERSION
 
-Version 0.03
+Version 0.04
 
 =cut
 
-our $VERSION = '0.03';
+our $VERSION = '0.04';
 
 
 sub new {
@@ -72,8 +72,8 @@ sub load {
 	my ($self, $sid) = @_;
 	my $prefix = $self->redis_prefix;
 	
-	my $data = $self->redis->get("$prefix:$sid:data" => $data);
-	my $expires = $self->redis->get("$prefix:$sid:expires" => $expires);
+	my $data = $self->redis->get("$prefix:$sid:data");
+	my $expires = $self->redis->get("$prefix:$sid:expires");
 	
 	return ($expires, $data);
 }
@@ -82,9 +82,9 @@ sub load {
 sub delete {
 	my ($self, $sid) = @_;
 	my $prefix = $self->redis_prefix;
-	$self->redis->del("$prefix:$sid:sid" => $sid);
-	$self->redis->del("$prefix:$sid:data" => $data);
-	$self->redis->del("$prefix:$sid:expires" => $expires);
+	$self->redis->del("$prefix:$sid:sid");
+	$self->redis->del("$prefix:$sid:data");
+	$self->redis->del("$prefix:$sid:expires");
 	return 1;
 }
 
