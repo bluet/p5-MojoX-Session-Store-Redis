@@ -1,4 +1,9 @@
 Revision history for MojoX-Session-Store-Redis
+
+0.05	Fri May 25 05:43:45 CST 2012
+	Bugfix: POD syntax error
+	change to ExtUtils::MakeMaker
+
 0.04	Fri May  4 10:39:34 CST 2012
 	Bugfix: compile error
 	

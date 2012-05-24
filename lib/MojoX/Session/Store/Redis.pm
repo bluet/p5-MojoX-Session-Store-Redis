@@ -1,5 +1,6 @@
 package MojoX::Session::Store::Redis;
 
+use utf8;
 use warnings;
 use strict;
 use Redis;
@@ -15,6 +16,7 @@ __PACKAGE__->attr('redis_dbid');
 
 
 =encoding utf8
+
 =head1 NAME
 
 MojoX::Session::Store::Redis - RedisDB Store for MojoX::Session
@@ -25,7 +27,7 @@ Version 0.04
 
 =cut
 
-our $VERSION = '0.04';
+our $VERSION = '0.05';
 
 
 sub new {

@@ -1,17 +1,22 @@
-use inc::Module::Install;
+use strict;
+use warnings;
+use ExtUtils::MakeMaker;
 
-name     'MojoX-Session-Store-Redis';
-all_from 'lib/MojoX/Session/Store/Redis.pm';
-author   q{BlueT - Matthew Lien - 練喆明 <BlueT@BlueT.org>};
-license  'perl';
-
-requires 'Redis'		=> 0;
-requires 'namespace::clean'	=> 0;
-requires 'MojoX::Session::Store'	=> 0;
-
-build_requires 'Test::More';
-
-auto_install;
-
-WriteAll;
-
+WriteMakefile(
+    NAME                => 'MojoX-Session-Store-Redis',
+    AUTHOR              => q{BlueT - Matthew Lien - 練喆明 <BlueT@BlueT.org>},
+    VERSION_FROM        => 'lib/MojoX/Session/Store/Redis.pm',
+    ABSTRACT_FROM       => 'lib/MojoX/Session/Store/Redis.pm',
+    ($ExtUtils::MakeMaker::VERSION >= 6.3002
+      ? ('LICENSE'=> 'perl')
+      : ()),
+    PL_FILES            => {},
+    PREREQ_PM => {
+        'Test::More'		=> 0,
+        'Redis'			=> 0,
+	'namespace::clean'	=> 0,
+	'MojoX::Session::Store'	=> 0,
+    },
+    dist                => { COMPRESS => 'gzip -9f', SUFFIX => 'gz', },
+    clean               => { FILES => 'AnyEvent-CallbackStack-*' },
+);
