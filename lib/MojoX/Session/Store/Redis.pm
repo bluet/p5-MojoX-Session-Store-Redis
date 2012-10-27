@@ -36,13 +36,12 @@ sub new {
 	bless $self, $class;
 
 	$param ||= {};
-	my $dbid = $self->redis_dbid = delete $param->{redis_dbid};
+	$self->redis_dbid(delete $param->{redis_dbid});
 	$self->redis_prefix(delete $param->{redis_prefix} || 'mojo-session');
 	$param->{server} ||= '127.0.0.1:6379';
 	
 	$self->redis($param->{redis} || Redis->new($param));
-	
-	# FIXME: $dbid
+	$self->redis->select($self->redis_dbid);
 
 	return $self;
 }
