@@ -36,7 +36,7 @@ sub new {
 	bless $self, $class;
 
 	$param ||= {};
-	$self->redis_dbid(delete $param->{redis_dbid});
+	$self->redis_dbid(delete $param->{redis_dbid} || 0);
 	$self->redis_prefix(delete $param->{redis_prefix} || 'mojo-session');
 	$param->{server} ||= '127.0.0.1:6379';
 	
