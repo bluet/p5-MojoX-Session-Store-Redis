@@ -56,6 +56,13 @@ sub create {
 	$self->redis->set("$prefix:$sid:data" => $data);
 	$self->redis->set("$prefix:$sid:expires" => $expires);
 	
+	# ttl
+	if ( $expires > 0 ) {
+		$self->redis->expire("$prefix:$sid:sid", $expires);
+		$self->redis->expire("$prefix:$sid:data", $expires);
+		$self->redis->expire("$prefix:$sid:expires", $expires);
+	}
+
 	# FIXME
 	# Check error
 		#~ require Data::Dumper;
