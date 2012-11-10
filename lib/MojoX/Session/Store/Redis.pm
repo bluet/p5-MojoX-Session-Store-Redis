@@ -4,9 +4,9 @@ use utf8;
 use warnings;
 use strict;
 use Redis;
+use JSON::XS;
 
 use base 'MojoX::Session::Store';
-
 
 use namespace::clean;
 
@@ -51,6 +51,7 @@ sub create {
 	my ($self, $sid, $expires, $data) = @_;
 	my $prefix = $self->redis_prefix;
 
+	$data = encode_json($data) if $data;
 	$self->redis->set("$prefix:$sid:sid" => $sid);
 	$self->redis->set("$prefix:$sid:data" => $data);
 	$self->redis->set("$prefix:$sid:expires" => $expires);
@@ -74,6 +75,7 @@ sub load {
 	my $prefix = $self->redis_prefix;
 	
 	my $data = $self->redis->get("$prefix:$sid:data");
+	$data = decode_json($data) if $data;
 	my $expires = $self->redis->get("$prefix:$sid:expires");
 	
 	return ($expires, $data);
