@@ -4,7 +4,7 @@ use utf8;
 use warnings;
 use strict;
 use Redis;
-use JSON::XS;
+use JSON;
 
 use base 'MojoX::Session::Store';
 
@@ -12,7 +12,7 @@ use namespace::clean;
 
 __PACKAGE__->attr('redis');
 __PACKAGE__->attr('redis_prefix');
-__PACKAGE__->attr('redis_dbid');
+__PACKAGE__->attr('_redis_dbid');
 
 
 =encoding utf8
@@ -23,11 +23,11 @@ MojoX::Session::Store::Redis - RedisDB Store for MojoX::Session
 
 =head1 VERSION
 
-Version 0.04
+Version 0.06
 
 =cut
 
-our $VERSION = '0.05';
+our $VERSION = '0.06';
 
 
 sub new {
@@ -36,12 +36,12 @@ sub new {
 	bless $self, $class;
 
 	$param ||= {};
-	$self->redis_dbid(delete $param->{redis_dbid} || 0);
+	$self->_redis_dbid(delete $param->{redis_dbid} || 0);
 	$self->redis_prefix(delete $param->{redis_prefix} || 'mojo-session');
 	$param->{server} ||= '127.0.0.1:6379';
 	
 	$self->redis($param->{redis} || Redis->new($param));
-	$self->redis->select($self->redis_dbid);
+	$self->redis->select($self->_redis_dbid);
 
 	return $self;
 }
@@ -99,6 +99,16 @@ sub delete {
 }
 
 
+sub redis_dbid {
+	my ($self, $dbid) = @_;
+	
+	return $self->_redis_dbid unless defined $dbid;
+	
+	$self->_redis_dbid($dbid);
+	$self->redis->select( $self->_redis_dbid );
+}
+
+
 =head1 SYNOPSIS
 
 	my $session = MojoX::Session->new(
@@ -113,6 +123,21 @@ sub delete {
 
 	# see doc for MojoX::Session
 
+And later when you need to use it in Mojolicious Controller
+
+	my $session = $self->stash('mojox-session');
+	$session->load;
+	$session->create unless $session->sid;
+	
+	#set
+	$session->data(
+		id => 5,
+		name => 'hoge',
+	);
+	
+	#get
+	my $name = $session->data('name');
+
 
 =head1 DESCRIPTION
 
@@ -125,24 +150,27 @@ session in a Redis database.
 L<MojoX::Session::Store::Redis> implements the following attributes.
 
 =head2 C<redis>
-    
-    my $db = $store->redis;
 
-Get and set MojoX::Redis object.
+Get and set Redis object.
+
+	$store->redis( Redis->new($param) );
+	my $redis = $store->redis;
 
 =head2 C<redis_prefix>
-    
-    my $prefix = $store->redis_prefix;
 
 Get and set the Key prefix of the stored session in Redis.
 Default is 'mojo-session'.
 
+	$store->redis_prefix('mojo-session');
+	my $prefix = $store->redis_prefix;
+
 =head2 C<redis_dbid>
-    
-    my $dbid = $store->redis_dbid;
 
 Get and set the DB ID Number to use in Redis DB.
 Default is 0.
+
+	$store->redis_dbid(0);
+	my $dbid = $store->redis_dbid;
 
 
 =head1 METHODS
@@ -153,7 +181,7 @@ L<MojoX::Session::Store>, and few more.
 =head2 C<new>
 
 C<new> uses the redis_prefix and redis_dbid parameters for the Key name prefix 
-and the DB ID Number respectively. All other parameters are passed to C<MojoX::Redis->new()>.
+and the DB ID Number respectively. All other parameters are passed to C<Redis->new()>.
 
 =head2 C<create>
 
@@ -184,6 +212,9 @@ the web interface at L<http://rt.cpan.org/NoAuth/ReportBug.html?Queue=MojoX-Sess
 automatically be notified of progress on your bug as I make changes.
 
 
+=head1 CREDITS
+
+Tatsuya Fukata, L<https://github.com/fukata>
 
 =head1 CONTRIBUTE
 

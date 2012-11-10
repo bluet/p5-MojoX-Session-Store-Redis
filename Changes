@@ -1,5 +1,11 @@
 Revision history for MojoX-Session-Store-Redis
 
+0.06	Sat Nov 10 12:53:10 CST 2012
+	added: redis db id selection
+	added: encode/decode data to/from JSON
+	added: CREDITS section
+	added: dependency: JSON
+
 0.05	Fri May 25 05:43:45 CST 2012
 	Bugfix: POD syntax error
 	change to ExtUtils::MakeMaker
