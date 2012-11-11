@@ -39,7 +39,8 @@ sub new {
 	$param ||= {};
 	$self->_redis_dbid(delete $param->{redis_dbid} || 0);
 	$self->redis_prefix(delete $param->{redis_prefix} || 'mojo-session');
-	$self->auto_purge(delete $param->{auto_purge} || 1);
+    my $auto_purge = delete $param->{auto_purge};
+	$self->auto_purge(defined $auto_purge ? $auto_purge : 1);
 	$param->{server} ||= '127.0.0.1:6379';
 	
 	$self->redis($param->{redis} || Redis->new($param));
