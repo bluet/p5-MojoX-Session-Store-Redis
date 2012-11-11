@@ -57,7 +57,7 @@ sub create {
 	#~ $self->redis->set("$prefix:$sid:sid" => $sid);
 	#~ $self->redis->set("$prefix:$sid:data" => $data);
 	#~ $self->redis->set("$prefix:$sid:expires" => $expires);
-	$redis->hmset("$prefix:$sid", 'sid' => $sid, 'data' => $data, 'expires' => $expires);
+	$self->redis->hmset("$prefix:$sid", 'sid' => $sid, 'data' => $data, 'expires' => $expires);
 	
 	# ttl
 	if ( $self->auto_purge and $expires > 0 ) {
