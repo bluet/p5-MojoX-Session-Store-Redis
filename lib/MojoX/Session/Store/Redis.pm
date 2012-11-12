@@ -39,8 +39,7 @@ sub new {
 	$param ||= {};
 	$self->_redis_dbid(delete $param->{redis_dbid} || 0);
 	$self->redis_prefix(delete $param->{redis_prefix} || 'mojo-session');
-    my $auto_purge = delete $param->{auto_purge};
-	$self->auto_purge(defined $auto_purge ? $auto_purge : 1);
+	$self->auto_purge( delete $param->{auto_purge} // 1 );
 	$param->{server} ||= '127.0.0.1:6379';
 	
 	$self->redis($param->{redis} || Redis->new($param));
@@ -55,16 +54,10 @@ sub create {
 	my $prefix = $self->redis_prefix;
 
 	$data = encode_json($data) if $data;
-	#~ $self->redis->set("$prefix:$sid:sid" => $sid);
-	#~ $self->redis->set("$prefix:$sid:data" => $data);
-	#~ $self->redis->set("$prefix:$sid:expires" => $expires);
 	$self->redis->hmset("$prefix:$sid", 'sid' => $sid, 'data' => $data, 'expires' => $expires);
 	
 	# ttl
 	if ( $self->auto_purge and $expires > 0 ) {
-		#~ $self->redis->expire("$prefix:$sid:sid", $expires);
-		#~ $self->redis->expire("$prefix:$sid:data", $expires);
-		#~ $self->redis->expire("$prefix:$sid:expires", $expires);
 		$self->redis->expire("$prefix:$sid", $expires);
 	}
 
@@ -86,14 +79,9 @@ sub load {
 	my ($self, $sid) = @_;
 	my $prefix = $self->redis_prefix;
 	
-	#~ my $data = $self->redis->get("$prefix:$sid:data");
-	#~ $data = decode_json($data) if $data;
-	#~ my $expires = $self->redis->get("$prefix:$sid:expires");
-	
 	my %session = $self->redis->hgetall("$prefix:$sid");
 	$session{'data'} = $session{'data'} ? decode_json($session{'data'}) : undef ;
 	
-	#~ return ($expires, $data);
 	return ($session{'expires'}, $session{'data'});
 }
 
@@ -101,10 +89,9 @@ sub load {
 sub delete {
 	my ($self, $sid) = @_;
 	my $prefix = $self->redis_prefix;
-	#~ $self->redis->del("$prefix:$sid:sid");
-	#~ $self->redis->del("$prefix:$sid:data");
-	#~ $self->redis->del("$prefix:$sid:expires");
+	
 	$self->redis->del("$prefix:$sid");
+	
 	return 1;
 }
 
