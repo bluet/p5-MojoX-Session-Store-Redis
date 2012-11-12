@@ -16,7 +16,7 @@ WriteMakefile(
         'Redis'			=> 0,
 	'namespace::clean'	=> 0,
 	'MojoX::Session::Store'	=> 0,
-        'JSON::XS'	        => 0,
+        'JSON'			=> 0,
     },
     dist                => { COMPRESS => 'gzip -9f', SUFFIX => 'gz', },
     clean               => { FILES => 'AnyEvent-CallbackStack-*' },
