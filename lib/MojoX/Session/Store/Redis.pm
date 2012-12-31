@@ -65,7 +65,7 @@ sub create {
 		#~ $self->redis->expire("$prefix:$sid:sid", $expires);
 		#~ $self->redis->expire("$prefix:$sid:data", $expires);
 		#~ $self->redis->expire("$prefix:$sid:expires", $expires);
-		$self->redis->expire("$prefix:$sid", $expires);
+		$self->redis->expire("$prefix:$sid", $expires - time);
 	}
 
 	# FIXME
