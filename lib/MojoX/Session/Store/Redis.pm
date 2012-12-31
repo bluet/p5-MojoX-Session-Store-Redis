@@ -43,7 +43,7 @@ sub new {
 	$self->auto_purge(defined $auto_purge ? $auto_purge : 1);
 	$param->{server} ||= '127.0.0.1:6379';
 	
-	$self->redis($param->{redis} || Redis->new($param));
+	$self->redis($param->{redis} || Redis->new(%$param));
 	$self->redis->select($self->_redis_dbid);
 
 	return $self;
