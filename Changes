@@ -1,5 +1,11 @@
 Revision history for MojoX-Session-Store-Redis
 
+0.07	Mon Nov 12 17:53:22 CST 2012
+	added: auto purge from redis at expire
+	added: auto_purge flag
+	change: use redis hash instead of 3 different keys
+	dependency change: JSON instead of JSON::XS
+
 0.06	Sat Nov 10 12:53:10 CST 2012
 	added: redis db id selection
 	added: encode/decode data to/from JSON
