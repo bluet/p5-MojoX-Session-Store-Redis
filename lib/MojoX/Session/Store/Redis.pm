@@ -42,7 +42,7 @@ sub new {
 	$self->auto_purge( delete $param->{auto_purge} // 1 );
 	$param->{server} ||= '127.0.0.1:6379';
 	
-	$self->redis($param->{redis} || Redis->new($param));
+	$self->redis($param->{redis} || Redis->new(%$param));
 	$self->redis->select($self->_redis_dbid);
 
 	return $self;
@@ -58,7 +58,7 @@ sub create {
 	
 	# ttl
 	if ( $self->auto_purge and $expires > 0 ) {
-		$self->redis->expire("$prefix:$sid", $expires);
+		$self->redis->expire("$prefix:$sid", $expires - time);
 	}
 
 	# FIXME
