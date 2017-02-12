@@ -1,7 +1,7 @@
 Changes
 MANIFEST
 Makefile.PL
-README
+README.pod
 lib/MojoX/Session/Store/Redis.pm
 t/00-load.t
 t/boilerplate.t

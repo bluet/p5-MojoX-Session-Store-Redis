@@ -1,5 +1,10 @@
 Revision history for MojoX-Session-Store-Redis
 
+0.09	Sun Feb 12 23:27:55 CST 2017
+	changed: README -> README.pod
+	fixed: Makefile.PL and use utf8
+	added: META.yml META.json
+
 0.08	Sun Feb 12 22:22:26 CST 2017
 	removed: redis->new param checks
 

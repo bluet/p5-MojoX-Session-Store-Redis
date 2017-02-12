@@ -1,21 +1,3 @@
-package MojoX::Session::Store::Redis;
-
-use utf8;
-use warnings;
-use strict;
-use Redis;
-use JSON;
-
-use base 'MojoX::Session::Store';
-
-use namespace::clean;
-
-__PACKAGE__->attr('redis');
-__PACKAGE__->attr('redis_prefix');
-__PACKAGE__->attr('_redis_dbid');
-__PACKAGE__->attr('auto_purge');
-
-
 =encoding utf8
 
 =head1 NAME
@@ -26,84 +8,8 @@ MojoX::Session::Store::Redis - RedisDB Store for MojoX::Session
 
 Version 0.09
 
+
 =cut
-
-our $VERSION = '0.09';
-
-
-sub new {
-	my ($class, $param) = @_;
-	my $self = $class->SUPER::new();
-	bless $self, $class;
-
-	$param ||= {};
-	$self->_redis_dbid(delete $param->{redis_dbid} || 0);
-	$self->redis_prefix(delete $param->{redis_prefix} || 'mojo-session');
-	$self->auto_purge( delete $param->{auto_purge} // 1 );
-	
-	$self->redis($param->{redis} || Redis->new(%$param));
-	$self->redis->select($self->_redis_dbid);
-
-	return $self;
-}
-
-
-sub create {
-	my ($self, $sid, $expires, $data) = @_;
-	my $prefix = $self->redis_prefix;
-
-	$data = encode_json($data) if $data;
-	$self->redis->hmset("$prefix:$sid", 'sid' => $sid, 'data' => $data, 'expires' => $expires);
-	
-	# ttl
-	if ( $self->auto_purge and $expires > 0 ) {
-		$self->redis->expire("$prefix:$sid", $expires - time);
-	}
-
-	# FIXME
-	# Check error
-		#~ require Data::Dumper;
-		#~ warn Data::Dumper::Dumper($err);
-	
-	1;
-}
-
-
-sub update {
-	shift->create(@_);
-}
-
-
-sub load {
-	my ($self, $sid) = @_;
-	my $prefix = $self->redis_prefix;
-	
-	my %session = $self->redis->hgetall("$prefix:$sid");
-	$session{'data'} = $session{'data'} ? decode_json($session{'data'}) : undef ;
-	
-	return ($session{'expires'}, $session{'data'});
-}
-
-
-sub delete {
-	my ($self, $sid) = @_;
-	my $prefix = $self->redis_prefix;
-	
-	$self->redis->del("$prefix:$sid");
-	
-	return 1;
-}
-
-
-sub redis_dbid {
-	my ($self, $dbid) = @_;
-	
-	return $self->_redis_dbid unless defined $dbid;
-	
-	$self->_redis_dbid($dbid);
-	$self->redis->select( $self->_redis_dbid );
-}
-
 
 =head1 SYNOPSIS
 
@@ -278,6 +184,6 @@ by the Free Software Foundation; or the Artistic License.
 See http://dev.perl.org/licenses/ for more information.
 
 
+
 =cut
 
-1; # End of MojoX::Session::Store::Redis
