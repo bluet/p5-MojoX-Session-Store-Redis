@@ -24,11 +24,11 @@ MojoX::Session::Store::Redis - RedisDB Store for MojoX::Session
 
 =head1 VERSION
 
-Version 0.07
+Version 0.08
 
 =cut
 
-our $VERSION = '0.07';
+our $VERSION = '0.08';
 
 
 sub new {
@@ -40,7 +40,6 @@ sub new {
 	$self->_redis_dbid(delete $param->{redis_dbid} || 0);
 	$self->redis_prefix(delete $param->{redis_prefix} || 'mojo-session');
 	$self->auto_purge( delete $param->{auto_purge} // 1 );
-	$param->{server} ||= '127.0.0.1:6379';
 	
 	$self->redis($param->{redis} || Redis->new($param));
 	$self->redis->select($self->_redis_dbid);
@@ -119,6 +118,7 @@ sub redis_dbid {
 	);
 
 	# see doc for MojoX::Session
+	# see doc for Redis
 
 And later when you need to use it in Mojolicious Controller
 
@@ -139,7 +139,7 @@ And later when you need to use it in Mojolicious Controller
 =head1 DESCRIPTION
 
 L<MojoX::Session::Store::Redis> is a store for L<MojoX::Session> that stores a
-session in a Redis database.
+session in a L<Redis> database.
 
 
 =head1 ATTRIBUTES
@@ -148,7 +148,7 @@ L<MojoX::Session::Store::Redis> implements the following attributes.
 
 =head2 C<redis>
 
-Get and set Redis object.
+Get and set Redis object. See doc for L<Redis> param.
 
 	$store->redis( Redis->new($param) );
 	my $redis = $store->redis;

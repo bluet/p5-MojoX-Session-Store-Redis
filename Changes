@@ -1,5 +1,8 @@
 Revision history for MojoX-Session-Store-Redis
 
+0.08	Sun Feb 12 22:22:26 CST 2017
+	removed: redis->new param checks
+
 0.07	Mon Nov 12 17:53:22 CST 2012
 	added: auto purge from redis at expire
 	added: auto_purge flag
@@ -27,4 +30,3 @@ Revision history for MojoX-Session-Store-Redis
 
 0.01    Date/time
         First version, released on an unsuspecting world.
-
