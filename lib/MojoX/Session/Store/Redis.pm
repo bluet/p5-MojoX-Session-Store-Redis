@@ -41,7 +41,7 @@ sub new {
 	$self->redis_prefix(delete $param->{redis_prefix} || 'mojo-session');
 	$self->auto_purge( delete $param->{auto_purge} // 1 );
 	
-	$self->redis($param->{redis} || Redis->new($param));
+	$self->redis($param->{redis} || Redis->new(%$param));
 	$self->redis->select($self->_redis_dbid);
 
 	return $self;
@@ -57,7 +57,7 @@ sub create {
 	
 	# ttl
 	if ( $self->auto_purge and $expires > 0 ) {
-		$self->redis->expire("$prefix:$sid", $expires);
+		$self->redis->expire("$prefix:$sid", $expires - time);
 	}
 
 	# FIXME
