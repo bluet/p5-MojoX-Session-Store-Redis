@@ -4,11 +4,6 @@
 
 MojoX::Session::Store::Redis - RedisDB Store for MojoX::Session
 
-=head1 VERSION
-
-Version 0.09
-
-
 =cut
 
 =head1 SYNOPSIS
@@ -186,4 +181,3 @@ See http://dev.perl.org/licenses/ for more information.
 
 
 =cut
-

@@ -1,5 +1,8 @@
 Revision history for MojoX-Session-Store-Redis
 
+0.10	Tue Feb 21 02:06:49 CST 2017
+	remove t/boilerplate.t
+
 0.09	Sun Feb 12 23:27:55 CST 2017
 	changed: README -> README.pod
 	fixed: Makefile.PL and use utf8

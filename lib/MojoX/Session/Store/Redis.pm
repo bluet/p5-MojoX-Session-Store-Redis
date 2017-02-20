@@ -22,13 +22,9 @@ __PACKAGE__->attr('auto_purge');
 
 MojoX::Session::Store::Redis - RedisDB Store for MojoX::Session
 
-=head1 VERSION
-
-Version 0.09
-
 =cut
 
-our $VERSION = '0.09';
+our $VERSION = '0.10';
 
 
 sub new {
